@@ -1,40 +1,28 @@
-# GeoMasaha AI — Backend
+# Geo Surveying AI – حزمة التكامل الكاملة لمنصة أكاديمية جيو مساحة (GeoMasaha Pro)
 
-## تشغيل محلي
-    pip install -r requirements.txt
-    export ANTHROPIC_API_KEY=...      # Windows: set ANTHROPIC_API_KEY=...
-    export GM_SECRET=$(python -c "import secrets;print(secrets.token_hex(32))")
-    export GM_ADMIN_EMAILS=your@email.com
-    uvicorn main:app --reload --port 8000
+## محتويات الحزمة
+1. **`frontend/`**:
+   - `index-ai-snippet.html`: كود زر التبويب وقسم `Geo Surveying AI` الجاهز للإضافة داخل `index.html` دون المساس بأي قسم قائم.
+   - `geomasaha-ai.js`: وحدة JavaScript مستقلة لإدارة المحادثة، رفع الملفات، المعاينة الهندسية الفورية لملفات DXF وخرائط Leaflet، وسجل الجلسات.
+2. **`geomasaha-ai-backend/`**:
+   - خادم **Python FastAPI** متكامل يضم محرك **AutoCAD DXF (`ezdxf`)**، ومحرك **GIS (`GeoPandas + Shapely + PyProj`)**، والحاسبة المساحية الدقيقة، ومنسق **Gemini AI** المؤمّن.
 
-في صفحة المنصة: تبويبة GeoMasaha AI ← ⚙️ إعدادات الخادم ← http://localhost:8000 ← سجّل حساباً.
-حساب المدير هو البريد المذكور في GM_ADMIN_EMAILS. يظهر قسم «مشتركو GeoMasaha AI» داخل لوحة الإدارة.
+## خطوات التشغيل السريعة
+### 1. تشغيل الخادم الخلفي (Backend)
+```bash
+cd geomasaha-ai-backend
+python -m venv venv
+source venv/bin/activate  # أو venv\Scripts\activate على ويندوز
+pip install -r requirements.txt
+cp .env.example .env
+# ضع مفتاح GEMINI_API_KEY داخل ملف .env
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
 
-## النشر
-Render أو Railway أو VPS، والأمر: `uvicorn main:app --host 0.0.0.0 --port $PORT`.
-ضع المفاتيح وGM_SECRET في لوحة الاستضافة فقط، واجعل GM_DB على تخزين دائم.
-
-## الخطط والحدود
-- Free وPro، والحدود اليومية لكل خدمة (chat, upload, dxf, gis) قابلة للتعديل من لوحة الإدارة.
-- تفعيل الاشتراك يدوياً من المدير مع عدد الأيام، وينتهي تلقائياً فيعود الحساب إلى Free.
-- لا يوجد نظام دفع في هذه النسخة عمداً؛ التفعيل يتم بعد استلام الدفع يدوياً. عند تحديد بوابة الدفع تُضاف كنقطة webhook.
-
-## ما هو مُفعّل
-- تسجيل الدخول والجلسات الموقعة (HMAC)، وكلمات المرور مشفرة (PBKDF2).
-- الدردشة مع النموذج، وحفظ المحادثات على الخادم.
-- رفع CSV/XLSX واكتشاف أعمدة X/Y أو Easting/Northing.
-- إنشاء DXF لحدود قطعة أرض مع أبعاد وتسميات وإطار وسهم شمال ومساحة ومحيط.
-- GIS: قياس (مع geodesic)، Buffer للنقاط، عدّ النقاط داخل المضلعات، تقاطع مضلعين محدبين.
-- ملفات DXF تظهر لصاحبها فقط.
-
-## ما هو غير مُفعّل بعد
-- PostgreSQL: الحالي SQLite (المخطط بسيط وقابل للنقل).
-- استخراج محتوى PDF والصور وDXF المرفوع، وتحويل DWG.
-- Buffer للخطوط والمضلعات، والتقاطع للمضلعات غير المحدبة (تحتاج shapely/GEOS).
-- بوابة دفع حقيقية.
-- الملفات المُولَّدة تُحذف عند إعادة التشغيل إن لم تكن على تخزين دائم؛ أضف تنظيفاً دورياً قبل الإنتاج.
-
-## الاختبار
-    python test_geo_utils.py
-    python test_gis_ops.py
-    python test_store_auth.py
+### 2. الربط مع الواجهة الأمامية (GitHub Pages)
+1. ارفع ملف `geomasaha-ai.js` إلى مجلد الموقع الرئيسي بجانب `index.html`.
+2. أضف محتوى `index-ai-snippet.html` في الأماكن الموضحة داخل `index.html`.
+3. عرّف رابط الخادم المنشور قبل استدعاء السكربت:
+```html
+<script>window.GEOMASAHA_AI_API = "https://your-backend-domain.com/api/v1";</script>
+```

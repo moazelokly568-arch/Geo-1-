@@ -1,0 +1,162 @@
+<!-- 1. أضف هذا الزر داخل <nav id="mainTabNav"> في index.html -->
+<button data-tab="geomasaha-ai" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl transition flex items-center gap-2 text-emerald-300 bg-gradient-to-l from-emerald-500/20 to-teal-500/20 border border-emerald-400/50 hover:bg-emerald-500 hover:text-slate-950 shadow-sm">
+  <span>🤖</span><span>Geo Surveying AI</span>
+  <span class="px-1.5 py-0.5 text-[10px] rounded-full bg-emerald-500 text-slate-950 font-extrabold">AI</span>
+</button>
+
+<!-- 2. أضف هذا القسم داخل <main> في index.html بجانب بقية أقسام .tab-view -->
+<section id="view-geomasaha-ai" class="tab-view hidden space-y-5">
+  <!-- Header Banner -->
+  <div class="bg-gradient-to-l from-slate-900 via-slate-900/95 to-emerald-950/60 border border-emerald-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div class="space-y-1.5">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
+          <span>🛰️</span>
+          <span>محرك هندسي مدعوم بـ FastAPI + ezdxf + GeoPandas + PyProj</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Geo Surveying AI <span class="text-emerald-400">– Your Smart Engineering Assistant</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          مساعدك الهندسي الذكي للمساحة، GIS، الاستشعار عن بعد، AutoCAD وCivil 3D — حلل ملفاتك، أنشئ لوحات DXF وخرائط مكانية، وراجع حساباتك المساحية بدقة.
+        </p>
+      </div>
+
+      <!-- Quota & Controls -->
+      <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-start lg:justify-end">
+        <div class="bg-slate-950/90 border border-slate-800 px-3.5 py-2 rounded-xl text-xs">
+          <div class="flex items-center gap-2">
+            <span id="aiPlanBadge" class="px-2 py-0.5 rounded-full bg-slate-800 text-emerald-300 font-bold">الخطة المجانية</span>
+            <span id="aiQuotaText" class="text-slate-300 ltr-num">0 / 10</span>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-0.5">الطلبات اليومية المتاحة</div>
+        </div>
+        <button id="aiNewChatBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5 shadow">
+          <span>➕</span><span>محادثة جديدة</span>
+        </button>
+        <button id="aiToggleHistoryBtn" type="button" class="lg:hidden px-3 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 text-xs font-bold">
+          <span>🗂️</span><span>السجل</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Engineering Mode Selector -->
+    <div id="aiModeBar" class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 overflow-x-auto custom-scroll pb-1 text-xs font-bold">
+      <button type="button" data-ai-mode="assistant" class="ai-mode-btn px-3.5 py-2 rounded-xl bg-emerald-500 text-slate-950 transition whitespace-nowrap">
+        🧠 مساعد هندسي شامل
+      </button>
+      <button type="button" data-ai-mode="cad_dxf" class="ai-mode-btn px-3.5 py-2 rounded-xl bg-slate-950 text-slate-300 border border-slate-800 hover:border-emerald-500/40 transition whitespace-nowrap">
+        📐 إنشاء لوحة AutoCAD (DXF)
+      </button>
+      <button type="button" data-ai-mode="gis_map" class="ai-mode-btn px-3.5 py-2 rounded-xl bg-slate-950 text-slate-300 border border-slate-800 hover:border-emerald-500/40 transition whitespace-nowrap">
+        🗺️ خرائط GIS وتحليل مكاني
+      </button>
+      <button type="button" data-ai-mode="survey_calc" class="ai-mode-btn px-3.5 py-2 rounded-xl bg-slate-950 text-slate-300 border border-slate-800 hover:border-emerald-500/40 transition whitespace-nowrap">
+        🧮 الحاسبة المساحية وUTM
+      </button>
+      <button type="button" data-ai-mode="tutor" class="ai-mode-btn px-3.5 py-2 rounded-xl bg-slate-950 text-slate-300 border border-slate-800 hover:border-emerald-500/40 transition whitespace-nowrap">
+        🎓 المدرس الهندسي الذكي
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Workspace Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <!-- Sidebar: Chat History & Generated Files -->
+    <aside id="aiHistorySidebar" class="hidden lg:flex lg:col-span-3 flex-col bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-4 h-[680px]">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <h3 class="text-sm font-extrabold text-white flex items-center gap-1.5">
+          <span>🗂️</span><span>سجل المحادثات والمشاريع</span>
+        </h3>
+        <span id="aiSessionsCount" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-emerald-400 ltr-num">0</span>
+      </div>
+
+      <div id="aiSessionsList" class="flex-1 overflow-y-auto custom-scroll space-y-2 text-xs"></div>
+
+      <div class="border-t border-slate-800 pt-3 space-y-2">
+        <div class="text-xs font-bold text-amber-300 flex items-center justify-between">
+          <span>📁 الملفات الهندسية المُنشأة</span>
+          <span id="aiFilesCount" class="text-[11px] text-slate-400 ltr-num">0</span>
+        </div>
+        <div id="aiGeneratedFilesList" class="max-h-36 overflow-y-auto custom-scroll space-y-1.5 text-[11px]">
+          <div class="text-slate-500 text-center py-2">لا توجد ملفات مُولّدة بعد</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center/Right: Interactive Chat + Live CAD/GIS Preview -->
+    <div class="lg:col-span-9 flex flex-col bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden h-[680px]">
+      <!-- Quick Engineering Prompts -->
+      <div class="bg-slate-950/70 border-b border-slate-800 px-4 py-2.5 flex items-center gap-2 overflow-x-auto custom-scroll text-[11px]">
+        <span class="text-slate-400 font-bold shrink-0">أمثلة سريعة:</span>
+        <button type="button" class="ai-quick-prompt shrink-0 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-slate-700 transition" data-prompt="أنشئ لوحة رفع مساحي لقطعة أرض باستخدام الإحداثيات الموجودة في ملف Excel، مع حدود الأرض والأبعاد والمساحة وسهم الشمال والإطار الهندسي.">
+          📐 لوحة رفع مساحي DXF من Excel
+        </button>
+        <button type="button" class="ai-quick-prompt shrink-0 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-sky-300 border border-slate-700 transition" data-prompt="نفّذ تحليل حرم (Buffer Analysis) بمسافة 100 متر لملف الإحداثيات المرفق واحسب المساحة الكلية وكود EPSG لنظام UTM المناسب.">
+          🗺️ تحليل Buffer وحساب EPSG
+        </button>
+        <button type="button" class="ai-quick-prompt shrink-0 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-300 border border-slate-700 transition" data-prompt="احسب الميزانية الشبكية (Rise & Fall) وتحقق من الحسابات للقراءات: BS=1.520, IS=1.840, FS=2.110 علماً بأن منسوب الروبير BM=25.400m.">
+          🧮 حل مسألة ميزانية بالخطوات
+        </button>
+        <button type="button" class="ai-quick-prompt shrink-0 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-purple-300 border border-slate-700 transition" data-prompt="اشرح لي خطوات الإرجاع الجغرافي Georeferencing في ArcGIS Pro من الصفر ثم اختبرني بـ 3 أسئلة عملية.">
+          🎓 شرح واختبار Georeferencing
+        </button>
+      </div>
+
+      <!-- Messages Stream -->
+      <div id="aiMessagesContainer" class="flex-1 overflow-y-auto custom-scroll p-4 sm:p-5 space-y-4"></div>
+
+      <!-- Live Engineering Preview Drawer -->
+      <div id="aiPreviewDrawer" class="hidden border-t border-emerald-500/30 bg-slate-950/95 p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs font-extrabold text-emerald-400">
+            <span>👁️</span>
+            <span id="aiPreviewTitle">معاينة المخرج الهندسي قبل التحميل</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <a id="aiPreviewDownloadBtn" href="#" download class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">
+              ⬇️ تحميل الملف الناتج
+            </a>
+            <button id="aiClosePreviewBtn" type="button" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold">✕ إغلاق</button>
+          </div>
+        </div>
+        <div id="aiPreviewBody" class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          <div class="md:col-span-7 h-48 rounded-xl border border-slate-800 bg-[#050b14] overflow-hidden relative">
+            <canvas id="aiDxfPreviewCanvas" class="w-full h-full hidden"></canvas>
+            <div id="aiGisPreviewMap" class="w-full h-full hidden"></div>
+          </div>
+          <div id="aiPreviewMetrics" class="md:col-span-5 bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-xs space-y-1.5 max-h-48 overflow-y-auto custom-scroll"></div>
+        </div>
+      </div>
+
+      <!-- Attached File Pill -->
+      <div id="aiAttachmentBar" class="hidden bg-slate-950 border-t border-slate-800 px-4 py-2 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2 text-emerald-300 font-bold truncate">
+          <span>📎</span>
+          <span id="aiAttachmentName" class="truncate">file.xlsx</span>
+          <span id="aiAttachmentSize" class="text-[10px] text-slate-400 ltr-num"></span>
+        </div>
+        <button id="aiRemoveAttachmentBtn" type="button" class="text-rose-400 hover:text-rose-300 font-bold text-xs">حذف المرفق ✕</button>
+      </div>
+
+      <!-- Input Composer -->
+      <form id="aiChatForm" class="bg-slate-950 border-t border-slate-800 p-3 sm:p-4 flex items-end gap-2.5">
+        <input id="aiFileInput" type="file" accept=".xlsx,.xls,.csv,.pdf,.dxf,.geojson,.json,.png,.jpg,.jpeg,.webp" class="hidden">
+        <button id="aiAttachBtn" type="button" title="رفع ملف Excel, CSV, PDF, DXF, GeoJSON أو صورة" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-700 transition shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+          </svg>
+        </button>
+
+        <textarea id="aiPromptInput" rows="1" dir="auto" placeholder="اكتب طلبك الهندسي بالعربية أو الإنجليزية... (مثال: أنشئ لوحة DXF من ملف الإحداثيات أو احسب UTM)" 
+          class="flex-1 bg-slate-900 border border-slate-700 focus:border-emerald-400 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 outline-none resize-none max-h-32 custom-scroll"></textarea>
+
+        <button id="aiSendBtn" type="submit" class="px-4 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm transition shrink-0 flex items-center gap-1.5 shadow-lg">
+          <span>إرسال</span>
+          <span>➤</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+<script src="geomasaha-ai.js"></script>
